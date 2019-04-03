@@ -65,17 +65,31 @@ class Quiz{
   totalCorrect = 0;
   currentQuestion = '';
   totalQuestionsAsked = 0;
-
-  construct(){
-
-  }
+  usedQuestions = [];
 
   getQuestion(){
     // Grab random question from the question STORE and pass to setQuestion
+    let randomIndex = Math.floor(Math.random() * STORE.length);
+    let question    = STORE[randomIndex];
+    console.log(randomIndex)
+
+    this.usedQuestions.push(STORE.splice(randomIndex,1));
+    this.setQuestion(question);
   }
 
-  setQuestion(question){
+  setQuestion(questionObj){
     // Show question on the page as the next question
+    let $container = $('#question-container');
+    let letters    = "abcd";
+
+    $container.find('#question').text(questionObj.question);
+    questionObj.choices.forEach( (choice,index) => {
+    let answer = `<label for="${letters[index]}">
+                    <input id="${letters[index]}" type="radio" name="answer" value="answer${index}">
+                    <span class="answer">${choice}</span>
+                  </label>`
+    $('.answers').find('form').prepend(answer);
+    });
   }
 
   checkAnswer(id,answer){
@@ -101,9 +115,16 @@ class Quiz{
   getTotalQuestionsAsked(){
     this.totalQuestionsAsked += 1;
   }
-
-
 }
+
+$(function(){
+  $('#start').on('click',function(){
+    let quiz = new Quiz;
+    quiz.getQuestion();
+    $(this).parent().slideUp();
+    $('.quiz-container').fadeIn();
+  });
+});
 
 // On click of button to start the quiz
 // quiz = new Quiz()

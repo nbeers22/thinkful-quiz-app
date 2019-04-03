@@ -5,6 +5,11 @@
 
 body{
   background-color: #BB0000;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.hide{
+  display: none;
 }
 
 .container{
@@ -18,13 +23,17 @@ body{
 }
 
 .quiz-container{
+  
+}
+
+.question,.welcome{
   background-color: #666;
-  border: 1px solid #000;
   border-radius: 3px;
   padding: 30px;
   width: 90%;
   max-width: 500px;
   margin: 0 auto;
+  box-shadow: 0 0 5px 2px #000;
 }
 
 form label{
@@ -32,9 +41,9 @@ form label{
   margin: 10px 0;
 }
 
-#submit{
+#submit,#start{
   background-color: #BB0000;
-  color: #FFF;
+  color: #000;
   font-weight: bold;
   padding: 10px 25px;
   border: 0;
@@ -42,11 +51,13 @@ form label{
   text-transform: uppercase;
   border-radius: 3px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  border: 2px solid #000;
+  transition: all 0.2s ease-in-out;
 }
 
-#submit:hover{
+#submit:hover,#start:hover{
   background-color: #000;
+  color: #FFF;
 }
 
 footer{
@@ -62,6 +73,7 @@ footer div{
   padding: 30px;
   border-radius: 3px;
   margin: 30px 15px;
+  box-shadow: 0 0 5px 2px #000;
 }
 
 footer div h3{

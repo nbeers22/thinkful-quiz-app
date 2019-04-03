@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="Take the Ohio State Buckeyes football trivia quick to test your knowledge on all things Ohio State">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
   <link rel="stylesheet" href="app.css">
 </head>
 <body>
@@ -12,50 +13,45 @@
     <h1 class="text-center">Ohio State Buckeyes Football Trivia Quiz</h1>
   </header>
   <main>
-    <h3 class="text-center">Question 1 of 10</h3>
-    <div class="quiz-container">
-      <article class="question">
+    <div class="welcome text-center">
+      <h2>Welcome to the quiz!</h2>
+      <h3>Press start to begin</h3>
+      <button id="start">Start</button>
+    </div>
+    <div class="quiz-container hide">
+      <header>
+        <h3 id="current-question" class="text-center">Question 1 of 10</h3>
+      </header>
+      <article id="question-container" class="question">
         <header>
-          <h4>Question Goes Here</h4>
+          <h4 id="question">Question Goes Here</h4>
         </header>
         <div class="answers">
           <form action="">
-            <label for="a">
-              <input id="a" type="radio" name="answer" value="answer1">
-              <span class="answer">A</span>
-            </label>
-            <label for="b">
-              <input id="b" type="radio" name="answer" value="answer2">
-              <span class="answer">B</span>
-            </label>
-            <label for="c">
-              <input id="c" type="radio" name="answer" value="answer3">
-              <span class="answer">C</span>
-            </label>
-            <label for="d">
-              <input id="d" type="radio" name="answer" value="answer4">
-              <span class="answer">D</span>
-            </label>
             <p class="text-center"><input id="submit" type="submit" value="Check Answer"></p>
           </form>
         </div>
       </article>
+      <footer>
+        <div id="total-asked" class="text-center">
+          <h3>Asked:</h3>
+          <h2>0</h2>
+        </div>
+        <div id="total-correct" class="text-center">
+          <h3>Correct:</h3>
+          <h2>0</h2>
+        </div>
+        <div id="total-correct" class="text-center">
+          <h3>Score:</h3>
+          <h2>100%</h2>
+        </div>
+      </footer>
     </div>
-    <footer>
-      <div id="total-asked" class="text-center">
-        <h3>Asked:</h3>
-        <h2>0</h2>
-      </div>
-      <div id="total-correct" class="text-center">
-        <h3>Correct:</h3>
-        <h2>0</h2>
-      </div>
-      <div id="total-correct" class="text-center">
-        <h3>Score:</h3>
-        <h2>100%</h2>
-      </div>
-    </footer>
   </main>
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
   <script src="app.js"></script>
 </body>
 </html>
