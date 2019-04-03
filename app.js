@@ -82,19 +82,27 @@ class Quiz{
     let $container = $('#question-container');
     let letters    = "abcd";
 
+    // Show the next question on the page
     $container.find('#question').text(questionObj.question);
+
+    // Set the current question ID on the form to check the answer with later
+    $container.find('form').data('question-id',questionObj.id);
+
+    // Loop through each answer choice of the current question
     questionObj.choices.forEach( (choice,index) => {
     let answer = `<label for="${letters[index]}">
                     <input id="${letters[index]}" type="radio" name="answer" value="answer${index}">
                     <span class="answer">${choice}</span>
                   </label>`
+
+    // Prepend each choice to the form
     $('.answers').find('form').prepend(answer);
     });
   }
 
   checkAnswer(id,answer){
     // check (do a .find()) STORE to see if answer is correct by question id
-    // Call getTotalQuestionsAsked() to increment total questions
+    
     // if correct {
       // call setTotalCorrect to increment total correct
       // Flip card and say CORRECT!
@@ -102,6 +110,8 @@ class Quiz{
       // Flip card and say incorrect. Also show question and answer
     // }
 
+    // increment total questions asked
+    this.setTotalQuestionsAsked();
   }
 
   getTotalCorrect(){
@@ -109,11 +119,15 @@ class Quiz{
   }
 
   setTotalCorrect(){
-    this.totalCorrect += 1;
+    this.totalCorrect++;
   }
 
   getTotalQuestionsAsked(){
-    this.totalQuestionsAsked += 1;
+    
+  }
+
+  setTotalQuestionsAsked(){
+    this.totalQuestionsAsked++;
   }
 }
 

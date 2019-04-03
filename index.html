@@ -20,28 +20,28 @@
     </div>
     <div class="quiz-container hide">
       <header>
-        <h3 id="current-question" class="text-center">Question 1 of 10</h3>
+        <h3 id="current-question" class="text-center">Question <span class="total-asked">1</span> of 10</h3>
       </header>
       <article id="question-container" class="question">
         <header>
           <h4 id="question">Question Goes Here</h4>
         </header>
         <div class="answers">
-          <form action="">
+          <form action="" data-question-id="">
             <p class="text-center"><input id="submit" type="submit" value="Check Answer"></p>
           </form>
         </div>
       </article>
       <footer>
-        <div id="total-asked" class="text-center">
+        <div class="text-center">
           <h3>Asked:</h3>
-          <h2>0</h2>
+          <h2 class="total-asked">1</h2>
         </div>
         <div id="total-correct" class="text-center">
           <h3>Correct:</h3>
           <h2>0</h2>
         </div>
-        <div id="total-correct" class="text-center">
+        <div id="score" class="text-center">
           <h3>Score:</h3>
           <h2>100%</h2>
         </div>
