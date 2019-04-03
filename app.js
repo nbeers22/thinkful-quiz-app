@@ -71,8 +71,8 @@ class Quiz{
     // Grab random question from the question STORE and pass to setQuestion
     let randomIndex = Math.floor(Math.random() * STORE.length);
     let question    = STORE[randomIndex];
-    console.log(randomIndex)
 
+    // Remove the question from the STORE so a question cannot be repeated
     this.usedQuestions.push(STORE.splice(randomIndex,1));
     this.setQuestion(question);
   }
@@ -100,8 +100,14 @@ class Quiz{
     });
   }
 
-  checkAnswer(id,answer){
-    // check (do a .find()) STORE to see if answer is correct by question id
+  static checkAnswer(id,answer){
+    // find the question that was just answered by id
+    let question = STORE.find( question => question.id = id );
+
+    if (question.answer === answer) {
+      // Increment total correct
+      this.setTotalCorrect();
+    }
     
     // if correct {
       // call setTotalCorrect to increment total correct
