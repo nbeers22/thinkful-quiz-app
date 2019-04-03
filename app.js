@@ -61,5 +61,78 @@ const STORE = [
   }
 ]
 
+class Quiz{
+  totalCorrect = 0;
+  currentQuestion = '';
+  totalQuestionsAsked = 0;
+
+  construct(){
+
+  }
+
+  getQuestion(){
+    // Grab random question from the question STORE and pass to setQuestion
+  }
+
+  setQuestion(question){
+    // Show question on the page as the next question
+  }
+
+  checkAnswer(id,answer){
+    // check (do a .find()) STORE to see if answer is correct by question id
+    // Call getTotalQuestionsAsked() to increment total questions
+    // if correct {
+      // call setTotalCorrect to increment total correct
+      // Flip card and say CORRECT!
+    // }else{
+      // Flip card and say incorrect. Also show question and answer
+    // }
+
+  }
+
+  getTotalCorrect(){
+    // show this.totalCorrect on page
+  }
+
+  setTotalCorrect(){
+    this.totalCorrect += 1;
+  }
+
+  getTotalQuestionsAsked(){
+    this.totalQuestionsAsked += 1;
+  }
+
+
+}
+
+// On click of button to start the quiz
+// quiz = new Quiz()
+
+// Get question
+
+// Show question
+
+// Check the answer on submit click
+
+// If question answered correctly {
+  // Increment questions answered correctly
+// }
+
+// Increment total questions answered incorrectly or correctly
+// Increment current question number
+
+// Show next question
+
+// When 10 questions have been answered, show results
+
+
+
+
+
+
+
+
+
+
 
 
