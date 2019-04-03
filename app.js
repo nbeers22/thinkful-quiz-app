@@ -67,6 +67,13 @@ class Quiz{
   totalQuestionsAsked = 0;
   usedQuestions = [];
 
+  construct(){
+    this.totalCorrect = totalCorrect;
+    this.currentQuestion = currentQuestion;
+    this.totalQuestionsAsked = totalQuestionsAsked;
+    this.usedQuestions = usedQuestions;
+  }
+
   getQuestion(){
     // Grab random question from the question STORE and pass to setQuestion
     let randomIndex = Math.floor(Math.random() * STORE.length);
@@ -100,12 +107,12 @@ class Quiz{
     });
   }
 
-  static checkAnswer(id,answer){
+  checkAnswer(id,answer){
     // find the question that was just answered by id
     let question = STORE.find( question => question.id === id );
     console.log(answer)
 
-    if (question.answer === answer) {
+    if (question.answer == answer) {
       $('#answer-state').text('Correct!');
 
       // Increment total correct
@@ -116,34 +123,38 @@ class Quiz{
       $('#correct-answer').text(`The correct answer was ${question.answer}`);
     }
 
-    this.usedQuestions.push(STORE.splice(randomIndex,1));
-    console.log(STORE)
-    
-    // if correct {
-      // call setTotalCorrect to increment total correct
-      // Flip card and say CORRECT!
-    // }else{
-      // Flip card and say incorrect. Also show question and answer
-    // }
+    // Remove the question from STORE
+    this.usedQuestions.push(STORE.splice(question.id - 1,1));
 
-    // increment total questions asked
+    // increment total questions asked and total correct answers
     this.setTotalQuestionsAsked();
+    this.setTotalCorrect();
+
+    // Calculate score
+    this.calculateScore( this.getTotalQuestionsAsked(), this.getTotalCorrect() );
+
   }
 
   getTotalCorrect(){
-    // show this.totalCorrect on page
+    return this.totalCorrect;
   }
 
   setTotalCorrect(){
-    this.totalCorrect++;
+    this.totalCorrect += 1;
+    $('#total-correct').text(this.getTotalCorrect());
   }
 
   getTotalQuestionsAsked(){
-    
+    return this.totalQuestionsAsked;
   }
 
   setTotalQuestionsAsked(){
-    this.totalQuestionsAsked++;
+    this.totalQuestionsAsked += 1;
+    $('#total-asked').text(this.getTotalQuestionsAsked());
+  }
+
+  calculateScore(numOfQuestions,numOfCorrectAnswers){
+    $('#score').text( (numOfCorrectAnswers / numOfQuestions) * 100 + "%" );
   }
 }
 
@@ -159,7 +170,7 @@ $(function(){
       
       // get the vaue of the checked radio button and submit it as the answer
       let answer = $(this).find('input[name="answer"]:checked').val();
-      Quiz.checkAnswer($(this).data('question-id'),answer);
+      quiz.checkAnswer($(this).data('question-id'),answer);
     });
   });
 });
