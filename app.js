@@ -73,7 +73,7 @@ class Quiz{
     let question    = STORE[randomIndex];
 
     // Remove the question from the STORE so a question cannot be repeated
-    this.usedQuestions.push(STORE.splice(randomIndex,1));
+    
     this.setQuestion(question);
   }
 
@@ -91,7 +91,7 @@ class Quiz{
     // Loop through each answer choice of the current question
     questionObj.choices.forEach( (choice,index) => {
     let answer = `<label for="${letters[index]}">
-                    <input id="${letters[index]}" type="radio" name="answer" value="answer${index}">
+                    <input id="${letters[index]}" type="radio" name="answer" value="${choice}">
                     <span class="answer">${choice}</span>
                   </label>`
 
@@ -102,12 +102,22 @@ class Quiz{
 
   static checkAnswer(id,answer){
     // find the question that was just answered by id
-    let question = STORE.find( question => question.id = id );
+    let question = STORE.find( question => question.id === id );
+    console.log(answer)
 
     if (question.answer === answer) {
+      $('#answer-state').text('Correct!');
+
       // Increment total correct
       this.setTotalCorrect();
+
+    }else{
+      $('#answer-state').text('Wrong!')
+      $('#correct-answer').text(`The correct answer was ${question.answer}`);
     }
+
+    this.usedQuestions.push(STORE.splice(randomIndex,1));
+    console.log(STORE)
     
     // if correct {
       // call setTotalCorrect to increment total correct
@@ -143,6 +153,14 @@ $(function(){
     quiz.getQuestion();
     $(this).parent().slideUp();
     $('.quiz-container').fadeIn();
+
+    $('#question-container').on('submit','form',function(event){
+      event.preventDefault();
+      
+      // get the vaue of the checked radio button and submit it as the answer
+      let answer = $(this).find('input[name="answer"]:checked').val();
+      Quiz.checkAnswer($(this).data('question-id'),answer);
+    });
   });
 });
 
