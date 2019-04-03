@@ -20,7 +20,7 @@ const STORE = [
   {
     id: 4,
     question: "What was John Cooper's record against Michigan?",
-    answer: "1-11-1",
+    answer: "2-10-1",
     choices: ["1-12-1", "1-11-1","2-10-1","2-9-1"]
   },
   {
@@ -110,36 +110,39 @@ class Quiz{
   checkAnswer(id,answer){
     // find the question that was just answered by id
     let question = STORE.find( question => question.id === id );
-    console.log(answer)
 
     if (question.answer == answer) {
       $('#answer-state').text('Correct!');
 
       // Increment total correct
-      this.setTotalCorrect();
+      this.increaseTotalCorrect();
 
     }else{
       $('#answer-state').text('Wrong!')
       $('#correct-answer').text(`The correct answer was ${question.answer}`);
     }
 
-    // Remove the question from STORE
-    this.usedQuestions.push(STORE.splice(question.id - 1,1));
+    $('#card-front,#card-back').toggleClass('hide')
+
+    // Remove the question from STORE and put into usedQuestions
+    this.removeQuestion(question);
 
     // increment total questions asked and total correct answers
-    this.setTotalQuestionsAsked();
-    this.setTotalCorrect();
+    this.increaseTotalQuestionsAsked();
 
     // Calculate score
     this.calculateScore( this.getTotalQuestionsAsked(), this.getTotalCorrect() );
+  }
 
+  removeQuestion(question){
+    this.usedQuestions.push(STORE.splice(question.id - 1, 1));
   }
 
   getTotalCorrect(){
     return this.totalCorrect;
   }
 
-  setTotalCorrect(){
+  increaseTotalCorrect(){
     this.totalCorrect += 1;
     $('#total-correct').text(this.getTotalCorrect());
   }
@@ -148,18 +151,25 @@ class Quiz{
     return this.totalQuestionsAsked;
   }
 
-  setTotalQuestionsAsked(){
+  increaseTotalQuestionsAsked(){
     this.totalQuestionsAsked += 1;
     $('#total-asked').text(this.getTotalQuestionsAsked());
   }
 
   calculateScore(numOfQuestions,numOfCorrectAnswers){
-    $('#score').text( (numOfCorrectAnswers / numOfQuestions) * 100 + "%" );
+    let percent = (numOfCorrectAnswers / numOfQuestions) * 100;
+    $('#score').text( percent.toFixed() + "%" );
+  }
+
+  static clearAnswers(){
+    $('.answers').find('form label').remove();
   }
 }
 
 $(function(){
+
   $('#start').on('click',function(){
+
     let quiz = new Quiz;
     quiz.getQuestion();
     $(this).parent().slideUp();
@@ -170,38 +180,19 @@ $(function(){
       
       // get the vaue of the checked radio button and submit it as the answer
       let answer = $(this).find('input[name="answer"]:checked').val();
-      quiz.checkAnswer($(this).data('question-id'),answer);
+      quiz.checkAnswer( $(this).data('question-id'), answer );
     });
+
+    // Get another question when user clicks next question
+    $('#next-question').on('click',function(){
+      Quiz.clearAnswers();
+      quiz.getQuestion();
+      $('#card-front,#card-back').toggleClass('hide');
+    });
+
   });
+
 });
-
-// On click of button to start the quiz
-// quiz = new Quiz()
-
-// Get question
-
-// Show question
-
-// Check the answer on submit click
-
-// If question answered correctly {
-  // Increment questions answered correctly
-// }
-
-// Increment total questions answered incorrectly or correctly
-// Increment current question number
-
-// Show next question
-
-// When 10 questions have been answered, show results
-
-
-
-
-
-
-
-
 
 
 

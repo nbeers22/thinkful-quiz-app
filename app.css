@@ -37,7 +37,7 @@ form label{
   margin: 10px 0;
 }
 
-#submit,#start{
+.button{
   background-color: #BB0000;
   color: #000;
   font-weight: bold;
