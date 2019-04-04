@@ -65,21 +65,18 @@ class Quiz{
   totalCorrect = 0;
   currentQuestion = '';
   totalQuestionsAsked = 0;
-  usedQuestions = [];
 
   construct(){
-    this.totalCorrect = totalCorrect;
-    this.currentQuestion = currentQuestion;
+    this.totalCorrect        = totalCorrect;
+    this.currentQuestion     = currentQuestion;
     this.totalQuestionsAsked = totalQuestionsAsked;
-    this.usedQuestions = usedQuestions;
+    this.usedQuestions       = usedQuestions;
   }
 
   getQuestion(){
     // Grab random question from the question STORE and pass to setQuestion
     let randomIndex = Math.floor(Math.random() * STORE.length);
     let question    = STORE[randomIndex];
-
-    // Remove the question from the STORE so a question cannot be repeated
     
     this.setQuestion(question);
   }
@@ -87,7 +84,7 @@ class Quiz{
   setQuestion(questionObj){
     // Show question on the page as the next question
     let $container = $('#question-container');
-    let letters    = "abcd";
+    let letters    = "dcba";
 
     // Show the next question on the page
     $container.find('#question').text(questionObj.question);
@@ -97,27 +94,27 @@ class Quiz{
 
     // Loop through each answer choice of the current question
     questionObj.choices.forEach( (choice,index) => {
-    let answer = `<label for="${letters[index]}">
-                    <input id="${letters[index]}" type="radio" name="answer" value="${choice}">
-                    <span class="answer">${choice}</span>
-                  </label>`
+      let answer = `<div><input type="radio" name="answer" value="${choice}" id="${letters[index]}" class="form-radio"><label for="${letters[index]}">${choice}</label></div>`
 
-    // Prepend each choice to the form
-    $('.answers').find('form').prepend(answer);
+      // Prepend each choice to the form
+      $('.answers').find('form').prepend(answer);
     });
+
+    $('.total-asked').text(this.getTotalQuestionsAsked() + 1);
   }
 
   checkAnswer(id,answer){
     // find the question that was just answered by id
     let question = STORE.find( question => question.id === id );
+    let questionIndex = STORE.findIndex( question => question.id === id );
 
+    // Check is answer was correct or not
     if (question.answer == answer) {
+      $('#correct-answer').addClass('hide');
       $('#answer-state').text('Correct!');
-
-      // Increment total correct
       this.increaseTotalCorrect();
-
     }else{
+      $('#correct-answer').removeClass('hide');
       $('#answer-state').text('Wrong!')
       $('#correct-answer').text(`The correct answer was ${question.answer}`);
     }
@@ -125,17 +122,30 @@ class Quiz{
     $('#card-front,#card-back').toggleClass('hide')
 
     // Remove the question from STORE and put into usedQuestions
-    this.removeQuestion(question);
+    this.removeQuestion(questionIndex);
 
     // increment total questions asked and total correct answers
     this.increaseTotalQuestionsAsked();
 
     // Calculate score
-    this.calculateScore( this.getTotalQuestionsAsked(), this.getTotalCorrect() );
+    this.showPercent(this.calculateScore( this.getTotalQuestionsAsked(), this.getTotalCorrect() ));
+
+    // Check if quiz is done
+    this.isComplete()
+  }
+
+  isComplete(){
+    if(STORE.length === 0) this.showTotals();
+  }
+
+  showTotals(){
+    $('#percent').text(this.calculateScore( this.getTotalQuestionsAsked(), this.getTotalCorrect() ) + '%');
+    $('#card-front,#card-back').addClass('hide');
+    $('#quiz-complete').toggleClass('hide');
   }
 
   removeQuestion(question){
-    this.usedQuestions.push(STORE.splice(question.id - 1, 1));
+    STORE.splice(question, 1);
   }
 
   getTotalCorrect(){
@@ -158,11 +168,19 @@ class Quiz{
 
   calculateScore(numOfQuestions,numOfCorrectAnswers){
     let percent = (numOfCorrectAnswers / numOfQuestions) * 100;
-    $('#score').text( percent.toFixed() + "%" );
+    return percent.toFixed();
+  }
+
+  showPercent(score){
+    $('#score').text( score + "%" );
   }
 
   static clearAnswers(){
-    $('.answers').find('form label').remove();
+    $('.answers').find('form div').remove();
+  }
+
+  static reloadQuiz(){
+    location.reload();
   }
 }
 
@@ -178,9 +196,15 @@ $(function(){
     $('#question-container').on('submit','form',function(event){
       event.preventDefault();
       
-      // get the vaue of the checked radio button and submit it as the answer
+      // get the value of the checked radio button and submit it as the answer
       let answer = $(this).find('input[name="answer"]:checked').val();
-      quiz.checkAnswer( $(this).data('question-id'), answer );
+      if(!answer){
+        $('#error').removeClass('hide');
+        return false;
+      }else{
+        quiz.checkAnswer( $(this).data('question-id'), answer );
+        $('#error').addClass('hide');
+      }
     });
 
     // Get another question when user clicks next question
@@ -190,7 +214,9 @@ $(function(){
       $('#card-front,#card-back').toggleClass('hide');
     });
 
+
   });
+  $('#retry').click(Quiz.reloadQuiz);
 
 });
 

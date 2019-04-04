@@ -32,10 +32,46 @@ body{
   box-shadow: 0 0 5px 2px #000;
 }
 
-form label{
-  display: block;
-  margin: 10px 0;
+.form-radio{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: inline-block;
+  position: relative;
+  background-color: #f1f1f1;
+  color: #666;
+  top: 10px;
+  height: 30px;
+  width: 30px;
+  border: 0;
+  border-radius: 50px;
+  cursor: pointer;     
+  margin-right: 7px;
+  outline: none;
 }
+
+.form-radio:checked::before{
+  position: absolute;
+  font: 600 17px/1 'Open Sans', sans-serif;
+  left: 10px;
+  top: 4px;
+  content: '\02143';
+  transform: rotate(40deg);
+}
+
+.form-radio:hover{
+  background-color: #f7f7f7;
+}
+
+.form-radio:checked{
+  background-color: #f1f1f1;
+}
+
+label{
+  /*font: 300 16px/1.7 'Open Sans', sans-serif;*/
+  margin: 10px 0;
+  cursor: pointer;
+} 
 
 .button{
   background-color: #BB0000;
@@ -51,9 +87,13 @@ form label{
   transition: all 0.2s ease-in-out;
 }
 
-#submit:hover,#start:hover{
+.button:hover{
   background-color: #000;
   color: #FFF;
+}
+
+.button:focus{
+  outline: 0;
 }
 
 footer{
@@ -80,5 +120,16 @@ footer div h2{
   font-size: 36px;
 }
 
+@media(max-width: 767px){
 
+  footer{
+    flex-wrap: wrap;
+  }
+
+  footer div{
+    padding: 0 20px;
+    flex-basis: 100%;
+    margin: 30px 0 0;
+  }
+}
 
