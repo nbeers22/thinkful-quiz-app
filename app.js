@@ -20,7 +20,7 @@ const STORE = [
   {
     id: 4,
     question: "What was John Cooper's record against Michigan?",
-    answer: "1-11-1",
+    answer: "2-10-1",
     choices: ["1-12-1", "1-11-1","2-10-1","2-9-1"]
   },
   {
@@ -65,22 +65,26 @@ class Quiz{
   totalCorrect = 0;
   currentQuestion = '';
   totalQuestionsAsked = 0;
-  usedQuestions = [];
+
+  construct(){
+    this.totalCorrect        = totalCorrect;
+    this.currentQuestion     = currentQuestion;
+    this.totalQuestionsAsked = totalQuestionsAsked;
+    this.usedQuestions       = usedQuestions;
+  }
 
   getQuestion(){
     // Grab random question from the question STORE and pass to setQuestion
     let randomIndex = Math.floor(Math.random() * STORE.length);
     let question    = STORE[randomIndex];
-    console.log(randomIndex)
-
-    this.usedQuestions.push(STORE.splice(randomIndex,1));
+    
     this.setQuestion(question);
   }
 
   setQuestion(questionObj){
     // Show question on the page as the next question
     let $container = $('#question-container');
-    let letters    = "abcd";
+    let letters    = "dcba";
 
     // Show the next question on the page
     $container.find('#question').text(questionObj.question);
@@ -90,84 +94,128 @@ class Quiz{
 
     // Loop through each answer choice of the current question
     questionObj.choices.forEach( (choice,index) => {
-    let answer = `<label for="${letters[index]}">
-                    <input id="${letters[index]}" type="radio" name="answer" value="answer${index}">
-                    <span class="answer">${choice}</span>
-                  </label>`
+      let answer = `<div><input type="radio" name="answer" value="${choice}" id="${letters[index]}" class="form-radio"><label for="${letters[index]}">${choice}</label></div>`
 
-    // Prepend each choice to the form
-    $('.answers').find('form').prepend(answer);
+      // Prepend each choice to the form
+      $('.answers').find('form').prepend(answer);
     });
+
+    $('.total-asked').text(this.getTotalQuestionsAsked() + 1);
   }
 
   checkAnswer(id,answer){
-    // check (do a .find()) STORE to see if answer is correct by question id
-    
-    // if correct {
-      // call setTotalCorrect to increment total correct
-      // Flip card and say CORRECT!
-    // }else{
-      // Flip card and say incorrect. Also show question and answer
-    // }
+    // find the question that was just answered by id
+    let question = STORE.find( question => question.id === id );
+    let questionIndex = STORE.findIndex( question => question.id === id );
 
-    // increment total questions asked
-    this.setTotalQuestionsAsked();
+    // Check is answer was correct or not
+    if (question.answer == answer) {
+      $('#correct-answer').addClass('hide');
+      $('#answer-state').text('Correct!');
+      this.increaseTotalCorrect();
+    }else{
+      $('#correct-answer').removeClass('hide');
+      $('#answer-state').text('Wrong!')
+      $('#correct-answer').text(`The correct answer was ${question.answer}`);
+    }
+
+    $('#card-front,#card-back').toggleClass('hide')
+
+    // Remove the question from STORE and put into usedQuestions
+    this.removeQuestion(questionIndex);
+
+    // increment total questions asked and total correct answers
+    this.increaseTotalQuestionsAsked();
+
+    // Calculate score
+    this.showPercent(this.calculateScore( this.getTotalQuestionsAsked(), this.getTotalCorrect() ));
+
+    // Check if quiz is done
+    this.isComplete()
+  }
+
+  isComplete(){
+    if(STORE.length === 0) this.showTotals();
+  }
+
+  showTotals(){
+    $('#percent').text(this.calculateScore( this.getTotalQuestionsAsked(), this.getTotalCorrect() ) + '%');
+    $('#card-front,#card-back').addClass('hide');
+    $('#quiz-complete').toggleClass('hide');
+  }
+
+  removeQuestion(question){
+    STORE.splice(question, 1);
   }
 
   getTotalCorrect(){
-    // show this.totalCorrect on page
+    return this.totalCorrect;
   }
 
-  setTotalCorrect(){
-    this.totalCorrect++;
+  increaseTotalCorrect(){
+    this.totalCorrect += 1;
+    $('#total-correct').text(this.getTotalCorrect());
   }
 
   getTotalQuestionsAsked(){
-    
+    return this.totalQuestionsAsked;
   }
 
-  setTotalQuestionsAsked(){
-    this.totalQuestionsAsked++;
+  increaseTotalQuestionsAsked(){
+    this.totalQuestionsAsked += 1;
+    $('#total-asked').text(this.getTotalQuestionsAsked());
+  }
+
+  calculateScore(numOfQuestions,numOfCorrectAnswers){
+    let percent = (numOfCorrectAnswers / numOfQuestions) * 100;
+    return percent.toFixed();
+  }
+
+  showPercent(score){
+    $('#score').text( score + "%" );
+  }
+
+  static clearAnswers(){
+    $('.answers').find('form div').remove();
+  }
+
+  static reloadQuiz(){
+    location.reload();
   }
 }
 
 $(function(){
+
   $('#start').on('click',function(){
+
     let quiz = new Quiz;
     quiz.getQuestion();
     $(this).parent().slideUp();
     $('.quiz-container').fadeIn();
+
+    $('#question-container').on('submit','form',function(event){
+      event.preventDefault();
+      
+      // get the value of the checked radio button and submit it as the answer
+      let answer = $(this).find('input[name="answer"]:checked').val();
+      if(!answer){
+        $('#error').removeClass('hide');
+        return false;
+      }else{
+        quiz.checkAnswer( $(this).data('question-id'), answer );
+        $('#error').addClass('hide');
+      }
+    });
+
+    // Get another question when user clicks next question
+    $('#next-question').on('click',function(){
+      Quiz.clearAnswers();
+      quiz.getQuestion();
+      $('#card-front,#card-back').toggleClass('hide');
+    });
+
+
   });
+  $('#retry').click(Quiz.reloadQuiz);
+
 });
-
-// On click of button to start the quiz
-// quiz = new Quiz()
-
-// Get question
-
-// Show question
-
-// Check the answer on submit click
-
-// If question answered correctly {
-  // Increment questions answered correctly
-// }
-
-// Increment total questions answered incorrectly or correctly
-// Increment current question number
-
-// Show next question
-
-// When 10 questions have been answered, show results
-
-
-
-
-
-
-
-
-
-
-
-

@@ -16,34 +16,47 @@
     <div class="welcome text-center">
       <h2>Welcome to the quiz!</h2>
       <h3>Press start to begin</h3>
-      <button id="start">Start</button>
+      <button id="start" class="button">Start</button>
     </div>
     <div class="quiz-container hide">
       <header>
         <h3 id="current-question" class="text-center">Question <span class="total-asked">1</span> of 10</h3>
       </header>
       <article id="question-container" class="question">
-        <header>
-          <h4 id="question">Question Goes Here</h4>
-        </header>
-        <div class="answers">
-          <form action="" data-question-id="">
-            <p class="text-center"><input id="submit" type="submit" value="Check Answer"></p>
-          </form>
+        <div id="card-front" class="card-face">
+          <header>
+            <h4 id="question">Question Goes Here</h4>
+          </header>
+          <div class="answers">
+            <form action="" data-question-id="">
+              <p class="text-center"><input id="submit" class="button" type="submit" value="Check Answer"></p>
+              <div id="error" class="hide text-center">You must select an answer first</div>
+            </form>
+          </div>
+        </div>
+        <div id="card-back" class="hide text-center">
+          <h2 id="answer-state"></h2>
+          <p id="correct-answer" class="hide"></p>
+          <button id="next-question" class="button">Next Question</button>
+        </div>
+        <div id="quiz-complete" class="hide text-center">
+          <h2>You have completed the quiz!</h2>
+          <h2>You scored <span id="percent"></span></h2>
+          <button id="retry" class="button">Retry</button>
         </div>
       </article>
       <footer>
         <div class="text-center">
           <h3>Asked:</h3>
-          <h2 class="total-asked">1</h2>
+          <h2 id="total-asked">0</h2>
         </div>
-        <div id="total-correct" class="text-center">
+        <div class="text-center">
           <h3>Correct:</h3>
-          <h2>0</h2>
+          <h2 id="total-correct">0</h2>
         </div>
-        <div id="score" class="text-center">
+        <div class="text-center">
           <h3>Score:</h3>
-          <h2>100%</h2>
+          <h2 id="score">0%</h2>
         </div>
       </footer>
     </div>
