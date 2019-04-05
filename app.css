@@ -4,7 +4,7 @@
 }
 
 body{
-  background-color: #BB0000;
+  /*background-color: #BB0000;*/
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -23,7 +23,7 @@ body{
 }
 
 .question,.welcome{
-  background-color: #666;
+  /*background-color: #666;*/
   border-radius: 3px;
   padding: 30px;
   width: 90%;
@@ -105,7 +105,7 @@ footer{
 
 footer div{
   flex-basis: 33.33333%;
-  background-color: #666;
+  /*background-color: #666;*/
   padding: 30px;
   border-radius: 3px;
   margin: 30px 15px;

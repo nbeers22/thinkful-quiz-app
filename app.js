@@ -164,6 +164,7 @@ class Quiz{
   increaseTotalQuestionsAsked(){
     this.totalQuestionsAsked += 1;
     $('#total-asked').text(this.getTotalQuestionsAsked());
+
   }
 
   calculateScore(numOfQuestions,numOfCorrectAnswers){
@@ -219,7 +220,5 @@ $(function(){
   $('#retry').click(Quiz.reloadQuiz);
 
 });
-
-
 
 
